@@ -101,18 +101,25 @@ def conv():
         config_id = request.form.get('config_id')
         conv_id = request.form.get('conv_id')
 
-        conv = Conversations.objects.get(
-            config_id=config_id, user1=user1, user2=user2)
+        try:
+            print('Inside Try')
+            conv = Conversations.objects.get(
+                config_id=config_id, user1=user1, user2=user2)
 
-        msgs = Messages.objects.get(conv_id=conv)
+            msgs = Messages.objects.filter(conv_id=conv)
 
-    return jsonify(conv)
+            print('Inside Try msg')
 
-    # except:
-    #     conv = Conversations(config_id=config_id, user1=user1, user2=user2)
+            return jsonify(msgs)
 
-    #     conv.save()
+    # print({'text': msgs.text, 'time': msgs.time, 'sender': msgs.sender})
 
-    #     print(conv.pk)
+        except:
 
-    # return 'Success'
+            conv = Conversations(config_id=config_id, user1=user1, user2=user2)
+
+            conv.save()
+
+            print(conv.pk)
+
+    return 'Success'
